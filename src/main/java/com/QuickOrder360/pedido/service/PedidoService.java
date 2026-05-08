@@ -3,6 +3,8 @@ package com.QuickOrder360.pedido.service;
 import com.QuickOrder360.pedido.model.Pedido;
 import com.QuickOrder360.pedido.repository.PedidoRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +14,23 @@ import java.util.List;
 @Transactional
 public class PedidoService {
 
+    private static final Logger log = LoggerFactory.getLogger(PedidoService.class);
+
     @Autowired
     private PedidoRepository pedidoRepository;
 
     public List<Pedido> findAll(){
+        log.info("Buscando todos los pedidos");
         return pedidoRepository.findAll();
     }
 
     public Pedido save(Pedido pedido){
+        log.info("Guardando nuevo pedido");
         return pedidoRepository.save(pedido);
     }
 
     public void delete(Long id){
+        log.info("Eliminando pedido por ID: {}", id);
         pedidoRepository.deleteById(id);
     }
 }
