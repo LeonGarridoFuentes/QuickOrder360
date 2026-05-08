@@ -3,7 +3,7 @@
 ## Microservicios
 
 - Cliente
-- Pedido
+- Producto
 - Inventario
 - Pedidos
 - Detalle de Pedido
