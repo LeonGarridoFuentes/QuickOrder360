@@ -9,7 +9,7 @@ import java.util.Map;
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long>{
 
-    void deleteById(Integer id);
+    void deleteById(Long id);
 
 
 }

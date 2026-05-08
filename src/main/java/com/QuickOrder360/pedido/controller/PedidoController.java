@@ -2,6 +2,7 @@ package com.QuickOrder360.pedido.controller;
 
 import com.QuickOrder360.pedido.model.Pedido;
 import com.QuickOrder360.pedido.service.PedidoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +27,14 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<Pedido> guardar(@RequestBody Pedido pedido){
+    public ResponseEntity<Pedido> guardar(@Valid @RequestBody Pedido pedido){
         Pedido pedidoNuevo = pedidoService.save(pedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoNuevo);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Integer id){
+    public ResponseEntity<?> eliminar(@PathVariable Long id){
         try {
             pedidoService.delete(id);
             return ResponseEntity.noContent().build();

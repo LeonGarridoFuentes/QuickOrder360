@@ -2,6 +2,7 @@ package com.QuickOrder360.cliente.controller;
 
 import com.QuickOrder360.cliente.model.Cliente;
 import com.QuickOrder360.cliente.service.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +27,14 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> guardar(@RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> guardar(@Valid @RequestBody Cliente cliente){
         Cliente clienteNuevo = clienteService.save(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteNuevo);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Integer id){
+    public ResponseEntity<?> eliminar(@PathVariable Long id){
         try {
             clienteService.delete(id);
             return ResponseEntity.noContent().build();

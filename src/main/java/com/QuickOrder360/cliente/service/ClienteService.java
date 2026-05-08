@@ -23,7 +23,7 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public void delete(Integer id){
+    public void delete(Long id){
         clienteRepository.deleteById(id);
     }
 }

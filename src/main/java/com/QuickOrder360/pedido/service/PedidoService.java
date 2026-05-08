@@ -19,11 +19,11 @@ public class PedidoService {
         return pedidoRepository.findAll();
     }
 
-    public  Pedido save(Pedido pedido){
+    public Pedido save(Pedido pedido){
         return pedidoRepository.save(pedido);
     }
 
-    public void delete(Integer id){
+    public void delete(Long id){
         pedidoRepository.deleteById(id);
     }
 }
