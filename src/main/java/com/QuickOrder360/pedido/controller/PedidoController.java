@@ -44,7 +44,7 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody Pedido pedido){
+    public ResponseEntity<?> guardar(@Valid @RequestBody Pedido pedido){
 
         if(pedido.getCliente() == null){
             return ResponseEntity.badRequest().body("Debe ingresar un cliente");
