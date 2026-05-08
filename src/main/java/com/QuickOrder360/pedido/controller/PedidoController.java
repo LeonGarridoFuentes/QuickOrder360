@@ -47,17 +47,17 @@ public class PedidoController {
     public ResponseEntity<?> guardar(@Valid @RequestBody Pedido pedido){
 
         if(pedido.getCliente() == null){
-            return ResponseEntity.badRequest().body("Debe ingresar un cliente");
+            return ResponseEntity.badRequest().body("tiene k haber un cliente en el pedido");
         }
         Cliente clienteDB = clienteService.findById(pedido.getCliente().getId());
 
         if(clienteDB == null){
-            return ResponseEntity.badRequest().body("Cliente no encontrado");
+            return ResponseEntity.badRequest().body("no existe ese cliente");
         }
         pedido.setCliente(clienteDB);
 
         if(pedido.getProductos() == null || pedido.getProductos().isEmpty()){
-            return ResponseEntity.badRequest().body("Debe ingresar productos");
+            return ResponseEntity.badRequest().body("debe ingresar minimo un producto");
         }
         int total = 0;
 
@@ -68,7 +68,7 @@ public class PedidoController {
             Producto productoDB = productoService.findById(producto.getId());
 
             if(productoDB == null){
-                return ResponseEntity.badRequest().body("Producto no encontrado");
+                return ResponseEntity.badRequest().body("producto inexisente");
             }
             total += productoDB.getPrecio();
             productosCompletos.add(productoDB);

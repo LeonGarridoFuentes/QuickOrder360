@@ -41,6 +41,8 @@ public class Pedido {
     @Column(nullable = false)
     @NotNull
     private Integer precioTotal;
+
+    
 }
 
 //l
