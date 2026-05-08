@@ -7,7 +7,22 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
 
+    <changeSet id="1" author="leon">
 
+        <addColumn tableName="pedido">
+            <column name="cliente_id" type="BIGINT"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="pedido"
+                baseColumnNames="cliente_id"
+                referencedTableName="cliente"
+                referencedColumnNames="id"
+                constraintName="fk_pedido_cliente"/>
+
+    </changeSet>
 
 
 </databaseChangeLog>
+
+<!-- l -->

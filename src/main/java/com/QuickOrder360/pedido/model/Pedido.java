@@ -1,11 +1,14 @@
 package com.QuickOrder360.pedido.model;
 
+import com.QuickOrder360.cliente.model.Cliente;
+import com.QuickOrder360.producto.model.Producto;
+
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 
-import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pedido")
@@ -18,9 +21,20 @@ public class Pedido {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
+
+    @ManyToMany
+    @JoinTable(
+            name = "pedido_producto",
+            joinColumns = @JoinColumn(name = "pedido_id"),
+            inverseJoinColumns = @JoinColumn(name = "producto_id")
+    )
+    private List<Producto> productos;
+
     @Column(nullable = false)
-    private String nombre;
-
-
-
+    private Integer precioTotal;
 }
+
+//l

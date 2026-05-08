@@ -2,6 +2,7 @@ package com.QuickOrder360.cliente.controller;
 
 import com.QuickOrder360.cliente.model.Cliente;
 import com.QuickOrder360.cliente.service.ClienteService;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,3 +44,6 @@ public class ClienteController {
         }
     }
 }
+
+
+//l

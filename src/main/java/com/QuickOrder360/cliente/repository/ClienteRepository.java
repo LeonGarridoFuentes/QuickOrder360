@@ -8,3 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface ClienteRepository extends JpaRepository<Cliente, Long>{
     void deleteById(Long id);
 }
+
+
+//l
