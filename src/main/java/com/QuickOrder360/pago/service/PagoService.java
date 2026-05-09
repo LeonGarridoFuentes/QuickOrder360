@@ -53,4 +53,10 @@ public class PagoService {
         log.info("Pago aprobado para el pedido ID: {}", pedidoDB.getId());
         return pagoRepository.save(pago);
     }
+
+    public boolean isPagoAprobado(Long pedidoId) {
+        return pagoRepository.findByPedidoId(pedidoId)
+                .map(pago -> "APROBADO".equals(pago.getEstado()))
+                .orElse(false);
+    }
 }
