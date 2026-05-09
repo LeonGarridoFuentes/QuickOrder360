@@ -1,11 +1,12 @@
 package com.QuickOrder360.pedido.controller;
 
 import com.QuickOrder360.cliente.model.Cliente;
+import com.QuickOrder360.cliente.repository.ClienteRepository;
 import com.QuickOrder360.cliente.service.ClienteService;
 import com.QuickOrder360.exception.BadRequestException;
-import com.QuickOrder360.exception.ResourceNotFoundException;
 import com.QuickOrder360.producto.model.Producto;
 import com.QuickOrder360.producto.service.ProductoService;
+import com.QuickOrder360.pedido.model.DetallePedido;
 import com.QuickOrder360.pedido.model.Pedido;
 import com.QuickOrder360.pedido.service.PedidoService;
 
@@ -16,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -53,24 +53,32 @@ public class PedidoController {
         Cliente clienteDB = clienteService.findById(pedido.getCliente().getId());
         pedido.setCliente(clienteDB);
 
-        if (pedido.getProductos() == null || pedido.getProductos().isEmpty()) {
-            throw new BadRequestException("Debe ingresar mínimo un producto en el pedido");
+        if (pedido.getDetalles() == null || pedido.getDetalles().isEmpty()) {
+            throw new BadRequestException("Debe ingresar mínimo un detalle (producto y cantidad) en el pedido");
         }
 
         int total = 0;
-        List<Producto> productosCompletos = new ArrayList<>();
 
-        for (Producto producto : pedido.getProductos()) {
-            if (producto.getId() == null) {
-                throw new BadRequestException("Cada producto debe tener un ID válido");
+        for (DetallePedido detalle : pedido.getDetalles()) {
+            if (detalle.getProducto() == null || detalle.getProducto().getId() == null) {
+                throw new BadRequestException("Cada detalle debe tener un producto con ID válido");
             }
 
-            Producto productoDB = productoService.findById(producto.getId());
-            total += productoDB.getPrecio();
-            productosCompletos.add(productoDB);
+            Producto productoDB = productoService.findById(detalle.getProducto().getId());
+
+            if (detalle.getCantidad() == null || detalle.getCantidad() <= 0) {
+                throw new BadRequestException(
+                        "La cantidad debe ser mayor a 0 para el producto: " + productoDB.getNombreProducto());
+            }
+
+            detalle.setProducto(productoDB);
+            detalle.setPrecioUnitario(productoDB.getPrecio());
+            detalle.setSubtotal(productoDB.getPrecio() * detalle.getCantidad());
+            detalle.setPedido(pedido);
+
+            total += detalle.getSubtotal();
         }
 
-        pedido.setProductos(productosCompletos);
         pedido.setPrecioTotal(total);
 
         Pedido pedidoNuevo = pedidoService.save(pedido);

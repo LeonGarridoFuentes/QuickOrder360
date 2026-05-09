@@ -20,7 +20,7 @@ import java.util.List;
 
 public class Pedido {
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -28,20 +28,13 @@ public class Pedido {
     @NotNull
     private Cliente cliente;
 
-    @ManyToMany
-    @JoinTable(
-            name = "pedido_producto",
-            joinColumns = @JoinColumn(name = "pedido_id"),
-            inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @NotNull
-    private List<Producto> productos;
+    private List<DetallePedido> detalles;
 
     @Column(nullable = false)
     @NotNull
     private Integer precioTotal;
-
-    
 }
 
-//l
+// l
