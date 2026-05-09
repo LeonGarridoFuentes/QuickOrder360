@@ -19,31 +19,23 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public  ResponseEntity<List<Cliente>> listar(){
+    public ResponseEntity<List<Cliente>> listar() {
         List<Cliente> clientes = clienteService.findAll();
-        if (clientes.isEmpty()){
+        if (clientes.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(clientes);
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> guardar(@Valid @RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> guardar(@Valid @RequestBody Cliente cliente) {
         Cliente clienteNuevo = clienteService.save(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteNuevo);
     }
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id){
-        try {
-            clienteService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        clienteService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
-
-
-//l

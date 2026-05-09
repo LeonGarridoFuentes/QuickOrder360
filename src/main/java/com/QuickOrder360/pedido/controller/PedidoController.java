@@ -2,7 +2,8 @@ package com.QuickOrder360.pedido.controller;
 
 import com.QuickOrder360.cliente.model.Cliente;
 import com.QuickOrder360.cliente.service.ClienteService;
-import com.QuickOrder360.cliente.repository.ClienteRepository;
+import com.QuickOrder360.exception.BadRequestException;
+import com.QuickOrder360.exception.ResourceNotFoundException;
 import com.QuickOrder360.producto.model.Producto;
 import com.QuickOrder360.producto.service.ProductoService;
 import com.QuickOrder360.pedido.model.Pedido;
@@ -15,8 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/pedidos")
@@ -35,60 +36,50 @@ public class PedidoController {
     private ClienteRepository clienteRepository;
 
     @GetMapping
-    public  ResponseEntity<List<Pedido>> listar(){
+    public ResponseEntity<List<Pedido>> listar() {
         List<Pedido> pedidos = pedidoService.findAll();
-        if (pedidos.isEmpty()){
+        if (pedidos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(pedidos);
     }
 
     @PostMapping
-    public ResponseEntity<?> guardar(@Valid @RequestBody Pedido pedido){
+    public ResponseEntity<?> guardar(@Valid @RequestBody Pedido pedido) {
 
-        if(pedido.getCliente() == null){
-            return ResponseEntity.badRequest().body("tiene k haber un cliente en el pedido");
+        if (pedido.getCliente() == null || pedido.getCliente().getId() == null) {
+            throw new BadRequestException("Debe especificar un cliente con su ID en el pedido");
         }
         Cliente clienteDB = clienteService.findById(pedido.getCliente().getId());
-
-        if(clienteDB == null){
-            return ResponseEntity.badRequest().body("no existe ese cliente");
-        }
         pedido.setCliente(clienteDB);
 
-        if(pedido.getProductos() == null || pedido.getProductos().isEmpty()){
-            return ResponseEntity.badRequest().body("debe ingresar minimo un producto");
+        if (pedido.getProductos() == null || pedido.getProductos().isEmpty()) {
+            throw new BadRequestException("Debe ingresar mínimo un producto en el pedido");
         }
-        int total = 0;
 
+        int total = 0;
         List<Producto> productosCompletos = new ArrayList<>();
 
-        for(Producto producto : pedido.getProductos()){
+        for (Producto producto : pedido.getProductos()) {
+            if (producto.getId() == null) {
+                throw new BadRequestException("Cada producto debe tener un ID válido");
+            }
 
             Producto productoDB = productoService.findById(producto.getId());
-
-            if(productoDB == null){
-                return ResponseEntity.badRequest().body("producto inexisente");
-            }
             total += productoDB.getPrecio();
             productosCompletos.add(productoDB);
         }
 
         pedido.setProductos(productosCompletos);
         pedido.setPrecioTotal(total);
+
         Pedido pedidoNuevo = pedidoService.save(pedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoNuevo);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id){
-        try {
-            pedidoService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        pedidoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
-
-//l

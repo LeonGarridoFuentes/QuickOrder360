@@ -18,37 +18,26 @@ public class InventarioController {
     private InventarioService inventarioService;
 
     @GetMapping
-    public ResponseEntity<List<Inventario>> listar(){
-
+    public ResponseEntity<List<Inventario>> listar() {
         List<Inventario> inventarios = inventarioService.findAll();
-
-        if(inventarios.isEmpty()){
+        if (inventarios.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-
         return ResponseEntity.ok(inventarios);
     }
 
     @PostMapping
-    public ResponseEntity<Inventario> guardar(@RequestBody Inventario inventario){
-        if(inventario.getProductos() == null){
+    public ResponseEntity<Inventario> guardar(@RequestBody Inventario inventario) {
+        if (inventario.getProductos() == null) {
             inventario.setProductos(new ArrayList<>());
         }
-
         Inventario inventarioNuevo = inventarioService.save(inventario);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(inventarioNuevo);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id){
-
-        try{
-            inventarioService.delete(id);
-            return ResponseEntity.noContent().build();
-
-        } catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        inventarioService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

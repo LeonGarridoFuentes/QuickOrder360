@@ -1,8 +1,11 @@
 package com.QuickOrder360.inventario.service;
 
+import com.QuickOrder360.exception.ResourceNotFoundException;
 import com.QuickOrder360.inventario.model.Inventario;
 import com.QuickOrder360.inventario.repository.InventarioRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +15,28 @@ import java.util.List;
 @Transactional
 public class InventarioService {
 
+    private static final Logger log = LoggerFactory.getLogger(InventarioService.class);
+
     @Autowired
     private InventarioRepository inventarioRepository;
 
-    public List<Inventario> findAll(){
+    public List<Inventario> findAll() {
+        log.info("Buscando todos los inventarios");
         return inventarioRepository.findAll();
     }
 
-    public Inventario save(Inventario inventario){return inventarioRepository.save(inventario);}
+    public Inventario save(Inventario inventario) {
+        log.info("Guardando nuevo inventario");
+        return inventarioRepository.save(inventario);
+    }
 
-    public void delete(Long id){
+    public void delete(Long id) {
+        log.info("Eliminando inventario por ID: {}", id);
+        if (!inventarioRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Inventario", id);
+        }
         inventarioRepository.deleteById(id);
     }
 }
 
-//l
+// l
