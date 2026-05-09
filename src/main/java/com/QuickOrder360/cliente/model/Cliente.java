@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "cliente")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Cliente {
 
     @Id
@@ -31,7 +30,7 @@ public class Cliente {
 
     @Column(nullable = true)
     @NotNull
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     @Column(nullable = false)
     @NotBlank

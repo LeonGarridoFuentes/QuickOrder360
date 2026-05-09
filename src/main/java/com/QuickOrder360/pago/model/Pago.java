@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pago")
@@ -38,11 +38,11 @@ public class Pago {
     @NotNull
     private String estado; // Podría ser un Enum: PENDIENTE, APROBADO, RECHAZADO
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaPago;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime fechaPago;
 
     @PrePersist
     protected void onCreate() {
-        fechaPago = new Date();
+        fechaPago = LocalDateTime.now();
     }
 }
