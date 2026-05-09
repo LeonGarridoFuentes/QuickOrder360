@@ -37,6 +37,20 @@ public class InventarioService {
         }
         inventarioRepository.deleteById(id);
     }
+
+    public Inventario findByProductoId(Long productoId) {
+        return inventarioRepository.findByProductoId(productoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Inventario para el Producto", productoId));
+    }
+
+    public void descontarStock(Long productoId, Integer cantidad) {
+        Inventario inventario = findByProductoId(productoId);
+        if (inventario.getStock() < cantidad) {
+            throw new com.QuickOrder360.exception.BadRequestException("Stock insuficiente para el producto con ID: " + productoId);
+        }
+        inventario.setStock(inventario.getStock() - cantidad);
+        inventarioRepository.save(inventario);
+    }
 }
 
 // l

@@ -28,8 +28,11 @@ public class InventarioController {
 
     @PostMapping
     public ResponseEntity<Inventario> guardar(@RequestBody Inventario inventario) {
-        if (inventario.getProductos() == null) {
-            inventario.setProductos(new ArrayList<>());
+        if (inventario.getProducto() == null || inventario.getProducto().getId() == null) {
+            throw new com.QuickOrder360.exception.BadRequestException("Debe especificar un producto con su ID");
+        }
+        if (inventario.getStock() == null || inventario.getStock() < 0) {
+            throw new com.QuickOrder360.exception.BadRequestException("El stock debe ser un valor válido mayor o igual a 0");
         }
         Inventario inventarioNuevo = inventarioService.save(inventario);
         return ResponseEntity.status(HttpStatus.CREATED).body(inventarioNuevo);

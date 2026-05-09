@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import jakarta.validation.constraints.Min;
+
 @Entity
+@Table(name = "inventario")
 @Data
 public class Inventario {
 
@@ -16,14 +19,15 @@ public class Inventario {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
-    @JoinTable(
-            name = "inventario_producto",
-            joinColumns = @JoinColumn(name = "inventario_id"),
-            inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
+    @OneToOne
+    @JoinColumn(name = "producto_id", nullable = false, unique = true)
     @NotNull
-    private List<Producto> productos = new ArrayList<>();
+    private Producto producto;
+
+    @Column(nullable = false)
+    @NotNull
+    @Min(0)
+    private Integer stock;
 
 }
 //l

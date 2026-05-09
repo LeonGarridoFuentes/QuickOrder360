@@ -6,6 +6,8 @@ import com.QuickOrder360.cliente.service.ClienteService;
 import com.QuickOrder360.exception.BadRequestException;
 import com.QuickOrder360.producto.model.Producto;
 import com.QuickOrder360.producto.service.ProductoService;
+import com.QuickOrder360.inventario.model.Inventario;
+import com.QuickOrder360.inventario.service.InventarioService;
 import com.QuickOrder360.pedido.model.DetallePedido;
 import com.QuickOrder360.pedido.model.Pedido;
 import com.QuickOrder360.pedido.service.PedidoService;
@@ -34,6 +36,9 @@ public class PedidoController {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private InventarioService inventarioService;
 
     @GetMapping
     public ResponseEntity<List<Pedido>> listar() {
@@ -71,6 +76,13 @@ public class PedidoController {
                         "La cantidad debe ser mayor a 0 para el producto: " + productoDB.getNombreProducto());
             }
 
+            Inventario inventario = inventarioService.findByProductoId(productoDB.getId());
+            if (inventario.getStock() < detalle.getCantidad()) {
+                throw new BadRequestException(
+                        "No hay stock suficiente para el producto: " + productoDB.getNombreProducto()
+                                + ". Stock actual: " + inventario.getStock());
+            }
+
             detalle.setProducto(productoDB);
             detalle.setPrecioUnitario(productoDB.getPrecio());
             detalle.setSubtotal(productoDB.getPrecio() * detalle.getCantidad());
@@ -82,6 +94,12 @@ public class PedidoController {
         pedido.setPrecioTotal(total);
 
         Pedido pedidoNuevo = pedidoService.save(pedido);
+
+        // Descontar inventario después de confirmar el pedido
+        for (DetallePedido detalle : pedidoNuevo.getDetalles()) {
+            inventarioService.descontarStock(detalle.getProducto().getId(), detalle.getCantidad());
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoNuevo);
     }
 

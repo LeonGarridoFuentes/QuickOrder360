@@ -9,6 +9,8 @@ public interface InventarioRepository extends JpaRepository<Inventario, Long>{
 
     void deleteById(Long id);
 
+    java.util.Optional<Inventario> findByProductoId(Long productoId);
+
 }
 
 //l
