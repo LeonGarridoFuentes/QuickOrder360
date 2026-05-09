@@ -1,8 +1,7 @@
-package com.QuickOrder360.Inventario.controller;
+package com.QuickOrder360.inventario.controller;
 
-import com.QuickOrder360.producto.service.ProductoService;
-import com.QuickOrder360.Inventario.model.Inventario;
-import com.QuickOrder360.Inventario.service.InventarioService;
+import com.QuickOrder360.inventario.model.Inventario;
+import com.QuickOrder360.inventario.service.InventarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

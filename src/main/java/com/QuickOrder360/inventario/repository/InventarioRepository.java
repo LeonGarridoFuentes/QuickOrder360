@@ -1,10 +1,8 @@
-package com.QuickOrder360.Inventario.repository;
+package com.QuickOrder360.inventario.repository;
 
-import com.QuickOrder360.Inventario.model.Inventario;
+import com.QuickOrder360.inventario.model.Inventario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Map;
 
 @Repository
 public interface InventarioRepository extends JpaRepository<Inventario, Long>{
