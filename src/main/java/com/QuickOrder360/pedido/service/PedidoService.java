@@ -39,6 +39,12 @@ public class PedidoService {
         }
         pedidoRepository.deleteById(id);
     }
+
+    public Pedido findById(Long id) {
+        log.info("Buscando pedido por ID: {}", id);
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido", id));
+    }
 }
 
 //l
