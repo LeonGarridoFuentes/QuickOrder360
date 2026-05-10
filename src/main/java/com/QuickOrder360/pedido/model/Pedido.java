@@ -33,7 +33,6 @@ public class Pedido {
     private List<DetallePedido> detalles;
 
     @Column(nullable = false)
-    @NotNull
     private Integer precioTotal;
 }
 
