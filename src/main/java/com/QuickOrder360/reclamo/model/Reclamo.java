@@ -35,7 +35,7 @@ public class Reclamo {
 
     @Column(nullable = false)
     @NotBlank
-    private String estado; // PENDIENTE, EN_REVISION, RESUELTO, RECHAZADO
+    private String estado;
 
     private LocalDateTime fechaReclamo;
 
