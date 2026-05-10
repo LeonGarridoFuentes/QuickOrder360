@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,7 +31,8 @@ public class InventarioController {
             throw new com.QuickOrder360.exception.BadRequestException("Debe especificar un producto con su ID");
         }
         if (inventario.getStock() == null || inventario.getStock() < 0) {
-            throw new com.QuickOrder360.exception.BadRequestException("El stock debe ser un valor válido mayor o igual a 0");
+            throw new com.QuickOrder360.exception.BadRequestException(
+                    "El stock debe ser un valor válido mayor o igual a 0");
         }
         Inventario inventarioNuevo = inventarioService.save(inventario);
         return ResponseEntity.status(HttpStatus.CREATED).body(inventarioNuevo);

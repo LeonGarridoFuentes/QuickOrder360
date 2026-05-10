@@ -35,9 +35,6 @@ public class PedidoController {
     private ClienteService clienteService;
 
     @Autowired
-    private ClienteRepository clienteRepository;
-
-    @Autowired
     private InventarioService inventarioService;
 
     @GetMapping
