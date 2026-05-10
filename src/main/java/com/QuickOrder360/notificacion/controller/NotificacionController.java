@@ -22,14 +22,14 @@ public class NotificacionController {
         return ResponseEntity.ok(notificacionService.findAll());
     }
 
-    @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<List<Notificacion>> listarPorUsuario(@PathVariable Long usuarioId) {
-        return ResponseEntity.ok(notificacionService.findByUsuario(usuarioId));
+    @GetMapping("/cliente/{clienteId}")
+    public ResponseEntity<List<Notificacion>> listarPorCliente(@PathVariable Long clienteId) {
+        return ResponseEntity.ok(notificacionService.findByCliente(clienteId));
     }
 
-    @GetMapping("/usuario/{usuarioId}/no-leidas")
-    public ResponseEntity<List<Notificacion>> listarNoLeidas(@PathVariable Long usuarioId) {
-        return ResponseEntity.ok(notificacionService.findNoLeidas(usuarioId));
+    @GetMapping("/cliente/{clienteId}/no-leidas")
+    public ResponseEntity<List<Notificacion>> listarNoLeidas(@PathVariable Long clienteId) {
+        return ResponseEntity.ok(notificacionService.findNoLeidas(clienteId));
     }
 
     @PostMapping
@@ -42,5 +42,4 @@ public class NotificacionController {
         notificacionService.marcarComoLeida(id);
         return ResponseEntity.noContent().build();
     }
-
 }

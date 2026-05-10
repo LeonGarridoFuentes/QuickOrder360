@@ -2,13 +2,10 @@ package com.QuickOrder360.inventario.model;
 
 import com.QuickOrder360.producto.model.Producto;
 import jakarta.persistence.*;
-import java.util.List;
-import java.util.ArrayList;
-
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import jakarta.validation.constraints.Min;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "inventario")
@@ -16,18 +13,18 @@ import jakarta.validation.constraints.Min;
 public class Inventario {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "producto_id", nullable = false, unique = true)
     @NotNull
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Producto producto;
 
     @Column(nullable = false)
     @NotNull
     @Min(0)
     private Integer stock;
-
 }
 //l

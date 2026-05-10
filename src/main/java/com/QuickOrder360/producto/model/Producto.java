@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Table(name = "producto")
 @Data
@@ -30,6 +31,8 @@ public class Producto {
     @Column(nullable = false)
     @NotNull
     private Integer precio;
+
+
     
 }
 //s

@@ -8,7 +8,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Getter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "detalle_pedido")
 @Data
@@ -42,4 +46,6 @@ public class DetallePedido {
     @Column(nullable = false)
     @NotNull
     private Integer subtotal;
+
+
 }

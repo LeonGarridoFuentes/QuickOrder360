@@ -92,7 +92,6 @@ public class PedidoController {
 
         Pedido pedidoNuevo = pedidoService.save(pedido);
 
-        // Descontar inventario después de confirmar el pedido
         for (DetallePedido detalle : pedidoNuevo.getDetalles()) {
             inventarioService.descontarStock(detalle.getProducto().getId(), detalle.getCantidad());
         }
