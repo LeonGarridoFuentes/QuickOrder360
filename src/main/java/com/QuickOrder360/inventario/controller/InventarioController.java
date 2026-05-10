@@ -2,6 +2,9 @@ package com.QuickOrder360.inventario.controller;
 
 import com.QuickOrder360.inventario.model.Inventario;
 import com.QuickOrder360.inventario.service.InventarioService;
+import com.QuickOrder360.producto.model.Producto;
+import com.QuickOrder360.producto.service.ProductoService;
+import com.QuickOrder360.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,9 @@ public class InventarioController {
     @Autowired
     private InventarioService inventarioService;
 
+    @Autowired
+    private ProductoService productoService;
+
     @GetMapping
     public ResponseEntity<List<Inventario>> listar() {
         List<Inventario> inventarios = inventarioService.findAll();
@@ -28,12 +34,18 @@ public class InventarioController {
     @PostMapping
     public ResponseEntity<Inventario> guardar(@RequestBody Inventario inventario) {
         if (inventario.getProducto() == null || inventario.getProducto().getId() == null) {
-            throw new com.QuickOrder360.exception.BadRequestException("Debe especificar un producto con su ID");
+            throw new BadRequestException("Debe especificar un producto con su ID");
         }
+        
+        // Recuperar producto completo para que la respuesta no tenga nulls
+        Producto productoDB = productoService.findById(inventario.getProducto().getId());
+        inventario.setProducto(productoDB);
+
         if (inventario.getStock() == null || inventario.getStock() < 0) {
-            throw new com.QuickOrder360.exception.BadRequestException(
+            throw new BadRequestException(
                     "El stock debe ser un valor válido mayor o igual a 0");
         }
+        
         Inventario inventarioNuevo = inventarioService.save(inventario);
         return ResponseEntity.status(HttpStatus.CREATED).body(inventarioNuevo);
     }
