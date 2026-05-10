@@ -42,4 +42,5 @@ public class NotificacionController {
         notificacionService.marcarComoLeida(id);
         return ResponseEntity.noContent().build();
     }
+
 }
